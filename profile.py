@@ -14,14 +14,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 	autoescape = True)
 
 class Profile(webapp2.RequestHandler):
-	def getTweets(self,myuser):
-		tweets = []
-		for key in myuser.tweetsList:
-			tweet_key = ndb.Key('Tweets',key)
-			tweet = tweet_key.get()
-			tweets.append(tweet)
-		tweets.reverse()
-		return tweets[0:50]
 
 	def get(self):
 		self.response.headers['Content-Type'] = 'text/html'
@@ -47,7 +39,10 @@ class Profile(webapp2.RequestHandler):
 		the_user_key = profile_user_k.get()
 		profile_user_key = ndb.Key("MyUser",the_user_key.userkey)
 		profile_user = profile_user_key.get()
-		tweets = self.getTweets(profile_user)
+		
+		t = Tweets()
+		tweets = t.getTweetsByKey(profile_user)
+		
 		tweet_keys = myuser.tweetsList
 		tweet_keys.reverse()
 

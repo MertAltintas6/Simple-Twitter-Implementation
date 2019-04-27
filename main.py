@@ -3,7 +3,6 @@ import jinja2
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext import blobstore
-from string import punctuation
 import os
 import time 
 
@@ -24,11 +23,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 	autoescape = True)
 
 class MainPage(webapp2.RequestHandler):
-	def strip_punctuation(self, s):
-		s = s.lower()
-		clean = ''.join(c for c in s if c not in punctuation)
-		words = clean.split()
-		return words
 
 	def get(self):
 		self.response.headers['Content-Type'] = 'text/html'
@@ -50,7 +44,8 @@ class MainPage(webapp2.RequestHandler):
 				self.redirect('/firstLogin')
 				return
 			#Not the first login
-			tweets = self.getTweets(myuser)
+			t = Tweets()
+			tweets = t.getTweets(myuser)
 			template_values = {'logout_url':users.create_logout_url(self.request.uri),'upload_url':blobstore.create_upload_url('/upload'), 'myuser': myuser, 'tweets': tweets,'fallowers_count':len(myuser.fallowersList), 'fallowing_count': len(myuser.fallowedList)}
 			template = JINJA_ENVIRONMENT.get_template('mainpage.html')
 			self.response.write(template.render(template_values))
@@ -64,21 +59,10 @@ class MainPage(webapp2.RequestHandler):
 
 		button = self.request.get("button")
 
-		#if button == "Tweet":
-		#	tweetText = self.request.get("tweet")
-		#	myuser.tweet_count += 1
-		#	tweetKey = user.user_id() + ":" + str(myuser.tweet_count)
-		#	tweetWords = self.strip_punctuation(tweetText)
-		#	tweet = Tweets(id=tweetKey, username = myuser.username, tweetText=tweetText, tweetWords=tweetWords)
-		#	myuser.tweetsList.append(tweetKey)
-			
-		#	tweet.put()
-		#	myuser.put()
-		#	time.sleep(0.05)
-
 		if button == "Search":
 			text = self.request.get("username").strip().lower()
-			textWords = self.strip_punctuation(text)
+			t = Tweets()
+			textWords = t.strip_punctuation(text)
 			retrieved_users = []
 			retrieved_tweets = []
 			retrieved_user = None
@@ -106,25 +90,6 @@ class MainPage(webapp2.RequestHandler):
 
 		self.redirect('/')
 
-
-
-
-	def getTweets(self,myuser):
-		tweets = []
-		usernames = self.getUsernames(myuser)
-		tweets = Tweets.query(Tweets.username.IN(usernames)).order(-Tweets.timestamp).fetch(50)
-		return tweets
-
-	def getUsernames(self, myuser):
-		usernames = []
-		usernames.append(myuser.username)
-		if myuser.fallowedList != None:
-			for key in myuser.fallowedList:
-				u_key = ndb.Key("MyUser",key)
-				u = u_key.get()
-				usernames.append(u.username)
-
-		return usernames
 
 app = webapp2.WSGIApplication([
 	('/', MainPage),

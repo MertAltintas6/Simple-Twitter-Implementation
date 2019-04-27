@@ -15,11 +15,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 	autoescape = True)
 
 class tweetEdit(webapp2.RequestHandler):
-	def strip_punctuation(self, s):
-		s = s.lower()
-		clean = ''.join(c for c in s if c not in punctuation)
-		words = clean.split()
-		return words
 	
 	def get(self):
 		self.response.headers['Content-Type'] = 'text/html'
@@ -65,7 +60,7 @@ class tweetEdit(webapp2.RequestHandler):
 			
 			tweetText = self.request.get("tweet")
 			tweet.tweetText = tweetText
-			tweet.tweetWords = self.strip_punctuation(tweetText)
+			tweet.tweetWords = tweet.strip_punctuation(tweetText)
 			tweet.put()
 			
 			redirect_url = '/profile?username=' + str(tweet.username)

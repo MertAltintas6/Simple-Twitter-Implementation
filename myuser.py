@@ -10,5 +10,3 @@ class MyUser(ndb.Model):
 	fallowedList = ndb.StringProperty(repeated=True)
 	tweet_count = ndb.IntegerProperty()
 
-
-

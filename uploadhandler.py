@@ -12,11 +12,6 @@ from allUsers import AllUsers
 from blobcollection import BlobCollection
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
-	def strip_punctuation(self, s):
-		s = s.lower()
-		clean = ''.join(c for c in s if c not in punctuation)
-		words = clean.split()
-		return words
 
 	def post(self):
 		user = users.get_current_user()
@@ -39,7 +34,8 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 		tweetText = self.request.get("tweet")
 		myuser.tweet_count += 1
-		tweetWords = self.strip_punctuation(tweetText)
+		tweet = Tweets()
+		tweetWords = tweet.strip_punctuation(tweetText)
 		if success:
 			tweet = Tweets(id=tweetId, username = myuser.username, tweetText=tweetText, tweetWords=tweetWords, blobKey=new_blob.blob)
 		else:
