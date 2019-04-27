@@ -19,7 +19,6 @@ class FirstLogin(webapp2.RequestHandler):
 		self.response.headers['Content-Type'] = 'text/html'
 
 		user = users.get_current_user()		
-		myuser = None
 
 		if user == None:
 			template_values = {'login_url':users.create_login_url(self.request.uri)}
@@ -27,18 +26,11 @@ class FirstLogin(webapp2.RequestHandler):
 			self.response.write(template.render(template_values))
 			return
 
-		else:
-			myuser_key = ndb.Key('MyUser', user.user_id())
-			myuser = myuser_key.get()
-			#FirstLogin
-			if myuser == None:
-				template_values = {'logout_url':users.create_logout_url(self.request.uri)}
-				template = JINJA_ENVIRONMENT.get_template('firstLogin.html')
-				self.response.write(template.render(template_values))
-				return
-			else:
-				self.redirect('/')
-				return
+		#FirstLogin	
+		template_values = {'logout_url':users.create_logout_url(self.request.uri)}
+		template = JINJA_ENVIRONMENT.get_template('firstLogin.html')
+		self.response.write(template.render(template_values))
+
 
 
 	def post(self):

@@ -47,9 +47,9 @@ class Profile(webapp2.RequestHandler):
 		tweet_keys.reverse()
 
 		if user.user_id() in profile_user.fallowersList:
-			buttonValue = "Unfallow"
+			buttonValue = "Unfollow"
 		else:
-			buttonValue = "Fallow"
+			buttonValue = "Follow"
 
 		template_values = {'username':myuser.username, 'logout_url':users.create_logout_url(self.request.uri), 'tweet_keys': tweet_keys ,'profile_user':profile_user, 'tweets':tweets, 'buttonValue': buttonValue,'control':control,'fallowers_count':len(profile_user.fallowersList), 'fallowing_count': len(profile_user.fallowedList)}
 		template = JINJA_ENVIRONMENT.get_template('profile.html')
@@ -71,13 +71,13 @@ class Profile(webapp2.RequestHandler):
 
 		button = self.request.get("button")
 
-		if button == "Fallow":
+		if button == "Follow":
 			profile_user.fallowersList.append(user.user_id())
 			myuser.fallowedList.append(the_user_key.userkey)
 			myuser.put()
 			profile_user.put()
 
-		elif button == "Unfallow":
+		elif button == "Unfollow":
 			profile_user.fallowersList.remove(user.user_id())
 			myuser.fallowedList.remove(the_user_key.userkey)
 			myuser.put()
