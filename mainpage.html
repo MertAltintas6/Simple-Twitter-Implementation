@@ -126,7 +126,7 @@
                                 </div>
                                 <div class="border-top">
                                     <div class="card-body">
-                                <input type="file" name="file" placeholder="Add An Image" />
+                                <input type="file" name="file" placeholder="Add An Image" accept="image/jpg, image/jpeg, image/png" />
                                 <input style="float: right" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-md" type="submit" name="button" value="Tweet">
                 </form>
                                     </div>
@@ -154,9 +154,9 @@
                                     <div class="comment-text w-100">
                                     	<span class="m-b-15 d-block" style="padding-bottom: 10px;color: #343130">{{tweet.tweetText}}</span>
                                     	{% if tweet.blobKey %}
-                                    	<center>
-                                    	<img src="/view_photo?key={{tweet.blobKey}}" width="600px" height="200px">
-                                    	</center>
+                                    	<div style="width: 50%; height: auto; margin: 20px;">
+                                    	<img src="/view_photo?key={{tweet.blobKey}}" class="img-fluid">
+                                    	</div>
                                         {% endif %}
                                         <a href="/profile?username={{tweet.username}}"><h6 class="font-medium" style="padding-bottom: 12px;font-size: 13px">@{{tweet.username}}</h6></a>
                                         <span class="text-muted float-right" style="padding-bottom: 12px;font-size: 13px">{{tweet.timestamp}}</span>                                           
@@ -203,9 +203,9 @@
                                     <div class="comment-text w-100">
                                     	<span class="m-b-15 d-block" style="padding-bottom: 10px;color: #343130">{{tweet.tweetText}}</span>
                                     	{% if tweet.blobKey %}
-                                    	<center>
-                                    	<img src="/view_photo?key={{tweet.blobKey}}" width="600px" height="200px">
-                                    	</center>
+                                    	<div style="width: 50%; height: auto; margin: 20px;">
+                                    	<img src="/view_photo?key={{tweet.blobKey}}" class="img-fluid">
+                                    	</div>
                                         {% endif %}
                                         <a href="/profile?username={{tweet.username}}"><h6 class="font-medium" style="padding-bottom: 12px;font-size: 13px">@{{tweet.username}}</h6></a>
                                     </div>
